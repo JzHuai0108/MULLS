@@ -196,6 +196,15 @@ DEFINE_string(baseline_reg_method, "", "name of the baseline lidar odometery met
 DEFINE_double(reg_voxel_size, 1.0, "the grid size of ndt or vgicp");
 DEFINE_bool(ndt_searching_method, true, "using direct searching or kdtree (0: kdtree, 1: direct7)");
 DEFINE_bool(voxel_gicp_on, true, "using voxel based gicp (faster)");
+
+double get_time_from_filename(const std::string& fn) {
+    size_t pos = fn.find_last_of("/\\");
+    size_t end = fn.find_last_of(".");
+    std::string filename = fn.substr(pos + 1, end - pos);
+    double ts = std::stod(filename);
+    return ts;
+}
+
 //Note: Set these parameters in the config file , or the default values are used.
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 int main(int argc, char **argv)

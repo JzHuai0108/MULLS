@@ -22,11 +22,17 @@
 
 # batch processing all the ros bags in the folder and save them all into a single folder for pcd files
 # (comment the following four lines if you want to do the convertion one by one)
-rosbag_folder_path=xxxx/xxxx
-pcd_folder_path=xxxx/xxxx
+rosbag_folder_path=/media/jhuai/T7/jhuai/nebulaN
+rosbag_folder_path=/media/jhuai/BackupPlus/jhuai/data/nebula/L_Spot3_Mix
 for rosbag in ${rosbag_folder_path}/*bag
-do 
-	rosrun pcl_ros bag_to_pcd ${rosbag} sensor_msgs/PointCloud2 ${pcd_folder_path}
+do
+	NAME="${rosbag_folder_path}/$(basename ${rosbag} .bag)"
+	echo "processing ${NAME}"
+	# rosrun pcl_ros bag_to_pcd ${rosbag} /husky2/velodyne_points ${NAME}_velodyne/pcd
+	# rosrun pcl_ros bag_to_pcd ${rosbag} /husky2/velodyne_front/velodyne_points ${NAME}_velodyne_front/pcd
+	# rosrun pcl_ros bag_to_pcd ${rosbag} /husky2/velodyne_rear/velodyne_points ${NAME}_velodyne_rear/pcd
+	# rosrun pcl_ros bag_to_pcd ${rosbag} /husky2/hvm/lidar/points ${NAME}_hovermap/pcd
+	rosrun pcl_ros bag_to_pcd ${rosbag} /spot3/hvm/lidar/points ${NAME}_hovermap/pcd
 done
 
 # do the processing for a single rosbag
