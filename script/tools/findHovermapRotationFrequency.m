@@ -35,9 +35,4 @@ for i =1:3
     ylabel("|P1(f)|");
 end
 
-% figure;
-% plot(qs(:, 1));
-% plot(qs(:, 2));
-% plot(qs(:, 3));
-% legend('x', 'y', 'z');
-%
+

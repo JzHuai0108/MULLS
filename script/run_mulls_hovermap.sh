@@ -24,6 +24,9 @@ project_folder=$datadir/husky2_lidar_2021-09-21-13-13-49_0_hovermap
 datadir=/media/jhuai/BackupPlus/jhuai/data/nebula/L_Spot3_Mix
 project_folder=$datadir/spot3_lidar_2021-09-21-13-13-27_0_hovermap  # zupt_on_or_not=true
 
+datadir=/media/jhuai/BackupPlus/jhuai/data/kuangye-lidar
+project_folder=$datadir/ceshidata_200s
+
 #KITTI
 #project_folder=${diskbase}/kitti-dataset/sequences/${sequence_id}
 #HESAI
@@ -96,6 +99,7 @@ ls ${pc_folder} >> ${pc_folder}_filelist.txt
 --pc_format=.${pc_format} \
 --gt_body_pose_file_path="" \
 --calib_file_path="" \
+--lidar_rotating_freq=0.45 \
 --output_adjacent_lo_pose_file_path=${lo_adjacent_tran_file} \
 --output_lo_lidar_pose_file_path=${lo_lidar_pose_file} \
 --output_lo_body_pose_file_path=${lo_body_pose_file} \

@@ -66,6 +66,7 @@ DEFINE_bool(vis_pause_at_loop_closure, false, "the visualizer would pause when a
 DEFINE_bool(show_range_image, false, "display the range image or not in realtime");
 DEFINE_bool(show_bev_image, false, "display the bev image or not in realtime");
 //lidar odometry related
+DEFINE_double(lidar_rotating_freq, 0.0, "The frequency at which the rotor is rotating the lidar.");
 DEFINE_bool(scan_to_scan_module_on, false, "apply scan-to-scan registration or just scan-to-localmap matching");
 DEFINE_int32(initial_scan2scan_frame_num, 2, "only conduct scan to scan registration for the first　${initial_scan2scan_frame_num} frames");
 DEFINE_int32(motion_compensation_method, 0, "method for motion compensation of lidar (0: disabled, 1: uniform motion model (from point-wise timestamp), 2: from azimuth, 3: from azimuth (rotation-only), 4: imu-assisted)");
@@ -636,6 +637,18 @@ int main(int argc, char **argv)
             }
         }
         std::chrono::steady_clock::time_point toc_loop_closure = std::chrono::steady_clock::now();
+        if (FLAGS_lidar_rotating_freq > 0) {
+            double ts = get_time_from_filename(cblock_source->filename);
+            double tt = get_time_from_filename(cblock_target->filename);
+            double dt = ts - tt;
+            double omega = FLAGS_lidar_rotating_freq * 2 * M_PI;
+            double theta = omega * dt;
+            Eigen::Matrix3d rotmat = Eigen::AngleAxisd(-theta, Eigen::Vector3d::UnitX()).toRotationMatrix();
+            initial_guess_tran.topLeftCorner<3, 3>() = rotmat;
+            initial_guess_tran.topRightCorner<3, 1>().setZero();
+            LOG(INFO) << "Initial guess tran with rotating lidar at freq " << FLAGS_lidar_rotating_freq << ":\n"
+                      << initial_guess_tran;
+        }
         //scan to scan registration
         if (FLAGS_scan_to_scan_module_on || i <= FLAGS_initial_scan2scan_frame_num)
         {
